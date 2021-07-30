@@ -15,6 +15,7 @@ import (
 // UUID is 128bits = 16bytes
 type UUID [16]byte
 
+// String stringify UUID to 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx' format
 func (uuid UUID) String() string {
 	return fmt.Sprintf("%x-%x-%x-%x-%x", uuid[0:4], uuid[4:6], uuid[6:8], uuid[8:10], uuid[10:])
 }
@@ -37,6 +38,7 @@ func (uuid *UUID) UnmarshalJSON(b []byte) error {
 	}
 }
 
+// New generates new unique UUID v4
 func New() (*UUID, error) {
 	uuid := new(UUID)
 
@@ -60,6 +62,7 @@ func New() (*UUID, error) {
 	return uuid, nil
 }
 
+// Equal compares uuid by bytes
 func Equal(uuid1 UUID, uuid2 UUID) bool {
 	for i, v := range uuid1 {
 		if v != uuid2[i] {
@@ -70,6 +73,7 @@ func Equal(uuid1 UUID, uuid2 UUID) bool {
 	return true
 }
 
+// ParseOpt is equal to Parse, but in error case generate zeroed UUID
 func ParseOpt(s string) *UUID {
 	id, err := Parse(s)
 	if err != nil {
@@ -78,6 +82,8 @@ func ParseOpt(s string) *UUID {
 	return id
 }
 
+// Parse generate UUID from string.
+// Returns error in in case of invalid input format.
 func Parse(s string) (*UUID, error) {
 	// the string format should be either in
 	// xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx (or)
@@ -133,7 +139,7 @@ func Parse(s string) (*UUID, error) {
 	return uuid, nil
 }
 
-// FromBytes is used to convert []byte to UUID
+// FromBytes is used to convert byte slice to UUID
 func FromBytes(data []byte) (UUID, error) {
 	var id UUID
 
@@ -144,6 +150,8 @@ func FromBytes(data []byte) (UUID, error) {
 
 	return id, nil
 }
+
+// FromBytesOpt is equal to FromBytes, but in error case generate zeroed UUID
 func FromBytesOpt(data []byte) UUID {
 	var id UUID
 
