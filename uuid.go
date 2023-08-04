@@ -12,6 +12,15 @@ import (
 // UUID is 128bits = 16bytes
 type UUID [16]byte
 
+func NewMust() *UUID {
+	id, err := New()
+	if err != nil {
+		return NewMust()
+	}
+
+	return id
+}
+
 // New generates new unique UUID v4
 func New() (*UUID, error) {
 	uuid := new(UUID)
